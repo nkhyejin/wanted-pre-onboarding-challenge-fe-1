@@ -1,17 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import LoginForm from '../components/auth/loginForm';
+import RegisterForm from '../components/auth/registerForm';
+import { Wrapper } from '../components/common/common';
 
 const Register = () => {
-  return <div css={divStyle}>This is darkorchid.</div>;
+  return (
+    <Wrapper>
+      <RegisterForm />
+    </Wrapper>
+  );
 };
-
-const divStyle = css`
-  color: darkorchid;
-  background-color: lightgray;
-`;
-// const Div = styled.div`
-//   color: darkorchid;
-//   background-color: lightgray;
-// `;
 
 export default Register;
