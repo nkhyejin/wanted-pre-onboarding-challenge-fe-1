@@ -2,11 +2,19 @@
 import { css } from '@emotion/react';
 import React from 'react';
 
-interface WrapperProps {
+interface Props {
   children: React.ReactNode;
 }
-export const Wrapper = ({ children }: WrapperProps) => {
+export const Wrapper = ({ children }: Props) => {
   return <div css={wrapperStyle}>{children}</div>;
+};
+
+export const RowBox = ({ children }: Props) => {
+  return <div css={rowStyle}>{children}</div>;
+};
+
+export const ColBox = ({ children }: Props) => {
+  return <div css={colStyle}>{children}</div>;
 };
 
 const wrapperStyle = css`
@@ -18,4 +26,17 @@ const wrapperStyle = css`
   justify-content: center;
   align-items: center;
   padding-top: 60px; ;
+`;
+
+const rowStyle = css`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+const colStyle = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
