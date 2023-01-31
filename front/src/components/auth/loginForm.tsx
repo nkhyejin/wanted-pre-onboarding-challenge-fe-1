@@ -4,7 +4,8 @@ import AuthInput from './Input';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { css } from '@emotion/react';
 import { requestLogin } from '../../apis/userApi';
-import { UserInfo } from '../../types/user';
+import { ResponseType, UserInfo } from '../../types/user';
+import { useNavigate } from 'react-router-dom';
 
 //util에 빼기?
 const Regex = {
@@ -13,20 +14,22 @@ const Regex = {
 };
 
 const LoginForm = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
     reset,
   } = useForm<UserInfo>();
 
   const onSubmit: SubmitHandler<UserInfo> = async (data) => {
-    //await api 호출
-    console.log(data);
-    // loginRequest(data);
+    const receiveData: ResponseType | undefined = await requestLogin(data);
 
-    reset();
+    alert(receiveData && receiveData.message);
+    if (receiveData?.status === 200) {
+      reset();
+      navigate('/todo');
+    }
   };
 
   const emailRegister = register('email', {
