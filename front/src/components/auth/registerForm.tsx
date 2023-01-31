@@ -1,16 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { requestRegister } from '../../apis/userApi';
+import { RegisterInfo, ResponseType } from '../../types/user';
 import { Button } from '../common/button';
 import AuthInput from './Input';
 
-interface FormValue {
-  id: string;
-  password: string;
-  confirmPassword?: string;
-}
-
 const RegisterForm = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -18,14 +16,14 @@ const RegisterForm = () => {
     formState: { errors },
     reset,
     getValues,
-  } = useForm<FormValue>();
+  } = useForm<RegisterInfo>();
 
   const Regex = {
     email: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g,
     // password: ,
   };
 
-  const emailRegister = register('id', {
+  const emailRegister = register('email', {
     required: { value: true, message: '이메일을 입력해주세요.' },
     pattern: { value: Regex.email, message: '이메일 형식을 입력해주세요.' },
   });
@@ -43,13 +41,19 @@ const RegisterForm = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<FormValue> = async (data) => {
+  const onSubmit: SubmitHandler<RegisterInfo> = async (data) => {
     delete data.confirmPassword;
     console.log(data);
 
-    //await api 호출
+    const receiveData: ResponseType | undefined = await requestRegister(data);
 
-    reset();
+    if (receiveData?.status === 200) {
+      alert(receiveData?.message);
+      navigate('/auth/login');
+      reset();
+    } else {
+      alert(receiveData?.message);
+    }
   };
 
   return (
@@ -57,7 +61,7 @@ const RegisterForm = () => {
       <AuthInput
         type="email"
         placeholder="이메일을 입력해주세요"
-        errorMessage={errors?.id?.message}
+        errorMessage={errors?.email?.message}
         {...emailRegister}
       />
       <AuthInput

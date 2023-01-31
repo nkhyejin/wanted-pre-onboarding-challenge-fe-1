@@ -3,11 +3,8 @@ import { Button } from '../common/button';
 import AuthInput from './Input';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { css } from '@emotion/react';
-
-interface FormValue {
-  id: string;
-  password: string;
-}
+import { requestLogin } from '../../apis/userApi';
+import { UserInfo } from '../../types/user';
 
 //util에 빼기?
 const Regex = {
@@ -22,15 +19,17 @@ const LoginForm = () => {
     watch,
     formState: { errors },
     reset,
-  } = useForm<FormValue>();
+  } = useForm<UserInfo>();
 
-  const onSubmit: SubmitHandler<FormValue> = async (data) => {
+  const onSubmit: SubmitHandler<UserInfo> = async (data) => {
     //await api 호출
     console.log(data);
+    // loginRequest(data);
+
     reset();
   };
 
-  const emailRegister = register('id', {
+  const emailRegister = register('email', {
     required: { value: true, message: '이메일을 입력해주세요.' },
     pattern: { value: Regex.email, message: '이메일 형식을 입력해주세요.' },
   });
@@ -44,7 +43,7 @@ const LoginForm = () => {
       <AuthInput
         type="email"
         placeholder="이메일을 입력해주세요"
-        errorMessage={errors?.id?.message}
+        errorMessage={errors?.email?.message}
         {...emailRegister}
       />
       <AuthInput
